@@ -139,16 +139,19 @@
     audio.play().catch(e => console.warn("Автовоспроизведение заблокировано:", e));
   });
 
-  function showOverlay() {
+  // Обработчик только для кнопки "Скоро"
+  soonBtn.addEventListener("click", () => {
     messageDiv.style.display = "none";
     overlay.style.pointerEvents = "auto";
     overlay.style.opacity = "1";
-  }
+  });
 
-  soonBtn.addEventListener("click", showOverlay);
+  // Делаем "Никогда" убегающей — и НЕ кликабельной
+  function moveNeverBtn(e) {
+    // Блокируем любое нажатие
+    e.preventDefault();
+    e.stopPropagation();
 
-  // Убегание кнопки "Никогда"
-  function moveNeverBtn() {
     const parentRect = messageDiv.getBoundingClientRect();
     const btnRect = neverBtn.getBoundingClientRect();
     const maxLeft = parentRect.width - btnRect.width - 10;
@@ -160,12 +163,19 @@
     neverBtn.style.top = `${top}px`;
   }
 
-  // На компьютерах — по наведению мышки
+  // Убегание мышкой (ПК)
   neverBtn.addEventListener("mousemove", moveNeverBtn);
 
-  // На телефоне — по касанию
+  // Убегание пальцем (мобилка)
   neverBtn.addEventListener("touchstart", moveNeverBtn);
+
+  // Блокируем клик целиком
+  neverBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  });
 </script>
+
 
 </body>
 </html>
