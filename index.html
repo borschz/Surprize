@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Сюрприз</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+      font-family: sans-serif;
+    }
+
+    #LoveButton {
+      padding: 18px 40px;
+      background: linear-gradient(90deg, #0062ff 0%, #4f8cff 100%);
+      color: white;
+      font-size: 1.3rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 32px;
+      box-shadow: 0 4px 18px rgba(0, 98, 255, 0.13);
+      cursor: pointer;
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    #LoveButton:hover {
+      background: linear-gradient(90deg, #0050cc 0%, #357ae8 100%);
+      transform: translateX(-50%) scale(1.05);
+    }
+
+    #messageDiv {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 98, 255, 0.95);
+      color: white;
+      padding: 18px 32px;
+      border-radius: 16px;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+      z-index: 9999;
+      display: none;
+      text-align: center;
+    }
+
+    #btnContainer {
+      margin-top: 12px;
+    }
+
+    .btn {
+      padding: 10px 24px;
+      border-radius: 12px;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 8px;
+    }
+
+    #soonBtn {
+      background: #4f8cff;
+    }
+
+    #neverBtn {
+      background: #ff4f4f;
+      position: relative;
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s;
+      z-index: 10000;
+    }
+
+    #overlay img {
+      max-width: 90vw;
+      max-height: 70vh;
+      border-radius: 24px;
+      box-shadow: 0 8px 48px rgba(0, 0, 0, 0.25);
+    }
+
+    #overlay div {
+      margin-top: 32px;
+      color: #fff;
+      font-size: 3rem;
+      font-weight: bold;
+      text-shadow: 0 2px 12px #000;
+    }
+  </style>
+</head>
+<body>
+  <button id="LoveButton">Нажми сюда <3</button>
+
+  <div id="messageDiv">
+    Че не пишешь? Когда гулять пойдем? Билеты до 18го июня!<br />
+    <div id="btnContainer">
+      <button class="btn" id="soonBtn">Скоро</button>
+      <button class="btn" id="neverBtn">Никогда</button>
+    </div>
+  </div>
+
+  <div id="overlay">
+    <img src="sobaka.jpg" alt="Жду" />
+    <div>Жду</div>
+  </div>
+
+  <audio id="audio" src="music.mp3" preload="auto"></audio>
+
+  <script>
+    const messageDiv = document.getElementById("messageDiv");
+    const overlay = document.getElementById("overlay");
+    const audio = document.getElementById("audio");
+
+    document.getElementById("LoveButton").addEventListener("click", () => {
+      messageDiv.style.display = "block";
+      audio.play().catch(e => console.warn("Автовоспроизведение заблокировано:", e));
+    });
+
+    document.getElementById("soonBtn").addEventListener("click", () => {
+      messageDiv.style.display = "none";
+      overlay.style.pointerEvents = "auto";
+      overlay.style.opacity = "1";
+    });
+
+    const neverBtn = document.getElementById("neverBtn");
+    neverBtn.addEventListener("mousemove", () => {
+      const parentRect = messageDiv.getBoundingClientRect();
+      const btnRect = neverBtn.getBoundingClientRect();
+      const maxLeft = parentRect.width - btnRect.width - 10;
+      const maxTop = parentRect.height - btnRect.height - 10;
+      const left = Math.random() * maxLeft;
+      const top = Math.random() * maxTop;
+      neverBtn.style.position = "absolute";
+      neverBtn.style.left = `${left}px`;
+      neverBtn.style.top = `${top}px`;
+    });
+  </script>
+</body>
+</html>
