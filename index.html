@@ -128,33 +128,44 @@
   <audio id="audio" src="music.mp3" preload="auto"></audio>
 
   <script>
-    const messageDiv = document.getElementById("messageDiv");
-    const overlay = document.getElementById("overlay");
-    const audio = document.getElementById("audio");
+  const messageDiv = document.getElementById("messageDiv");
+  const overlay = document.getElementById("overlay");
+  const audio = document.getElementById("audio");
+  const soonBtn = document.getElementById("soonBtn");
+  const neverBtn = document.getElementById("neverBtn");
 
-    document.getElementById("LoveButton").addEventListener("click", () => {
-      messageDiv.style.display = "block";
-      audio.play().catch(e => console.warn("Автовоспроизведение заблокировано:", e));
-    });
+  document.getElementById("LoveButton").addEventListener("click", () => {
+    messageDiv.style.display = "block";
+    audio.play().catch(e => console.warn("Автовоспроизведение заблокировано:", e));
+  });
 
-    document.getElementById("soonBtn").addEventListener("click", () => {
-      messageDiv.style.display = "none";
-      overlay.style.pointerEvents = "auto";
-      overlay.style.opacity = "1";
-    });
+  function showOverlay() {
+    messageDiv.style.display = "none";
+    overlay.style.pointerEvents = "auto";
+    overlay.style.opacity = "1";
+  }
 
-    const neverBtn = document.getElementById("neverBtn");
-    neverBtn.addEventListener("mousemove", () => {
-      const parentRect = messageDiv.getBoundingClientRect();
-      const btnRect = neverBtn.getBoundingClientRect();
-      const maxLeft = parentRect.width - btnRect.width - 10;
-      const maxTop = parentRect.height - btnRect.height - 10;
-      const left = Math.random() * maxLeft;
-      const top = Math.random() * maxTop;
-      neverBtn.style.position = "absolute";
-      neverBtn.style.left = `${left}px`;
-      neverBtn.style.top = `${top}px`;
-    });
-  </script>
+  soonBtn.addEventListener("click", showOverlay);
+
+  // Убегание кнопки "Никогда"
+  function moveNeverBtn() {
+    const parentRect = messageDiv.getBoundingClientRect();
+    const btnRect = neverBtn.getBoundingClientRect();
+    const maxLeft = parentRect.width - btnRect.width - 10;
+    const maxTop = parentRect.height - btnRect.height - 10;
+    const left = Math.random() * maxLeft;
+    const top = Math.random() * maxTop;
+    neverBtn.style.position = "absolute";
+    neverBtn.style.left = `${left}px`;
+    neverBtn.style.top = `${top}px`;
+  }
+
+  // На компьютерах — по наведению мышки
+  neverBtn.addEventListener("mousemove", moveNeverBtn);
+
+  // На телефоне — по касанию
+  neverBtn.addEventListener("touchstart", moveNeverBtn);
+</script>
+
 </body>
 </html>
