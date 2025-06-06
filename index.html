@@ -127,54 +127,60 @@
 
   <audio id="audio" src="music.mp3" preload="auto"></audio>
 
-  <script>
+<script>
   const messageDiv = document.getElementById("messageDiv");
   const overlay = document.getElementById("overlay");
   const audio = document.getElementById("audio");
   const soonBtn = document.getElementById("soonBtn");
   const neverBtn = document.getElementById("neverBtn");
 
+  // Кнопка "Нажми сюда"
   document.getElementById("LoveButton").addEventListener("click", () => {
     messageDiv.style.display = "block";
     audio.play().catch(e => console.warn("Автовоспроизведение заблокировано:", e));
   });
 
-  // Обработчик только для кнопки "Скоро"
+  // "Скоро" — работает правильно
   soonBtn.addEventListener("click", () => {
     messageDiv.style.display = "none";
     overlay.style.pointerEvents = "auto";
     overlay.style.opacity = "1";
   });
 
-  // Делаем "Никогда" убегающей — и НЕ кликабельной
-  function moveNeverBtn(e) {
-    // Блокируем любое нажатие
-    e.preventDefault();
-    e.stopPropagation();
+  // --- "Никогда" должна убегать и не срабатывать ---
 
+  function moveNeverBtn() {
     const parentRect = messageDiv.getBoundingClientRect();
     const btnRect = neverBtn.getBoundingClientRect();
     const maxLeft = parentRect.width - btnRect.width - 10;
     const maxTop = parentRect.height - btnRect.height - 10;
     const left = Math.random() * maxLeft;
     const top = Math.random() * maxTop;
-    neverBtn.style.position = "absolute";
     neverBtn.style.left = `${left}px`;
     neverBtn.style.top = `${top}px`;
   }
 
-  // Убегание мышкой (ПК)
-  neverBtn.addEventListener("mousemove", moveNeverBtn);
+  // Мышь (ПК)
+  neverBtn.addEventListener("mousemove", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    moveNeverBtn();
+  });
 
-  // Убегание пальцем (мобилка)
-  neverBtn.addEventListener("touchstart", moveNeverBtn);
+  // Палец (мобильные)
+  neverBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    moveNeverBtn();
+  });
 
-  // Блокируем клик целиком
+  // Блокируем клики
   neverBtn.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
   });
 </script>
+
 
 
 </body>
